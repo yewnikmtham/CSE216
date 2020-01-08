@@ -1,5 +1,4 @@
 (* Name: Michelle Tham *)
-(* SBU ID: 111810145 *)
 
 (*** Section 1: Recursion and Higher-order Function ***)
 (* 1.1 *)
@@ -35,38 +34,31 @@ let remove_if lst pred =
 	predicate pred lst
 ;;
 
- (*
-(* 1.4 *)			(* equivs (=) [1;1;3;4] -> [[1;1];[3];[4]] *)
-let equivs func list =			(* (=) is the equivalence function, groups together *)
-	equivs_helper func list [[]]
-;;		(* Is it empty? Are they equal? If not then make a new list *)
-								(* For each new element, have to iterate through past elements to check if equal *)
-let rec equivs_helper func lst =
-	match lst with (* Stores list in *)
-	| 
-	| equivs_helper_helper
-let rec equivs_helper_helper
-	|
-*)
 
+(* 1.4 *)			(* equivs (=) [1;1;3;4] -> [[1;1];[3];[4]] *)
+let rec add_to_list f element list =
+  match list with
+    | [] -> [[element]]
+    | h :: t -> if f element (List.hd h) = true then (h@[element]) :: t else h :: add_to_list f element t;;
+
+let equivs f lst = if lst = [] then [[]] else
+  let rec equivs_help aux list = match list with 
+    | [] -> aux
+    | h :: t -> equivs_help (add_to_list f h aux) t
+    in equivs_help [] lst;;
 
 (* 1.5 *)
-let slice lst i j =
-	let rec get_sub n = function
-		| [] -> []
-		| curr :: rest ->
-			if i > j then []		(* If the lowerbound is greater than upperbound *)
-			else if n = 0 then []	(* Base case *)
-			else curr :: get_sub (n-1) rest
-	in
-	let rec remove n = function
-		| [] -> []
-		| curr :: rest as listv ->
-			if n = 0 then listv
-			else remove (n-1) rest
-	in
-	get_sub (j-1) (remove i lst)
+let rec slice list i j = 
+  let rec answer =
+    match list with 
+      | [] -> []
+      | h :: t -> let sliced = (if j = 1 then []
+         else slice t (i-1) (j-1)) in
+            if i > 0 then sliced 
+              else h :: sliced in
+    answer sliceList
 ;;
+
 
 (* 1.6 *)
 let composition f g x =
@@ -74,13 +66,10 @@ let composition f g x =
 ;;
 
 (* 1.7 *)
-let rec equiv_on f g lst = 
-	match lst with
-	| [] -> true
-	| curr :: rest ->
-		if (f curr) = (g curr) then equiv_on f g rest
-		else false
-;;
+
+let equiv_on x y list = 
+  List.map x list = List.map y list;;
+
 
 (* 1.8 *)
 let rec pairwisefilter cmp lst =
@@ -101,5 +90,8 @@ let polynomial lst x =
 ;;
 
 (* 1.10 *)
-
+let rec powerset list = 
+  match list with 
+    | [] -> [[]] 
+    | h::t -> (powerset t) @ List.map(fun x -> h::x) (powerset t);;
 
