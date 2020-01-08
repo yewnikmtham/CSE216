@@ -1,5 +1,4 @@
 (* Name: Michelle Tham *)
-(* SBU ID: 111810145 *)
 
 (* 2.2 *)
 
@@ -8,38 +7,55 @@ type stack =
 ;;
 
 let start func =
-	func, []
+	func([])
 ;;	
 
 let push n lst func =
 	match lst with
-	| [] -> func [n]
-	| h :: t -> func (n :: h :: t)
+	| lst -> func(n :: lst)
 ;;
 
 let pop lst func = 
 	match lst with 
-	| [] -> func [] (* Empty stack *)
-	| h :: t -> func t
+	| [] -> func([]) (* Empty stack *)
+	| h :: t -> func(t)
 ;;
 
 let add lst func = 
 	match lst with
-	| [] -> func []
-	| x :: y :: rest -> func ((x + y) :: rest)
-	| _ -> func lst
+	| [] -> func([])
+	| [x] -> func(lst)
+	| x :: (y :: z) -> func((x + y) :: z)
 ;;
 
 let mult lst func =
 	match lst with
-	| [] -> func []
-	| x :: y :: rest -> func ((x * y ) :: rest)
-	| _ -> func lst
+	| [] -> func([])
+	| x :: [] -> func(lst)
+	| x :: (y :: z) -> func((x * y) :: z)
 ;;
 
 let clone lst func = 
 	match lst with
-	| [] -> func []
-	| h :: t -> (h :: h :: t)
+	| [] -> []
+	| h :: t -> func(h :: lst)
+;;
+
+let rec kpop_helper x lst func =
+	match lst with
+	| [] -> func([])
+	| a :: t -> if x<0 then t
+			else kpop_helper (x - 1) t func
+;;
+
+let kpop x lst func =
+	match lst with
+	| [] -> []
+	| h :: t -> func(kpop_helper (h) t func)
+;;
+
+let halt lst =
+	match lst with
+	lst -> lst
 ;;
 
